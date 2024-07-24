@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/htj2k",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Wasm-SIMD accelerated decoding and encoding of High-throughput JPEG2000 (HTJ2K) images.",
   "type": "module",
   "module": "./dist/index.js",
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "pnpm copyDemoAppAssets && vite",
-    "test": "npm run test:node",
+    "test": "pnpm run test:node",
     "test:node": "ava test/node/**.js",
     "copyDemoAppAssets": "shx mkdir -p test/browser/demo-app/public/shoelace && shx cp -r node_modules/@itk-wasm/demo-app/dist/assets test/browser/demo-app/public/",
     "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",

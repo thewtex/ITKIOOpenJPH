@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "npm scripts to generate itk-wasm artifacts.",
   "private": true,
-  "packageManager": "pnpm@9.4.0",
   "type": "module",
   "itk-wasm": {
+    "description": "Wasm-SIMD accelerated decoding and encoding of High-throughput JPEG2000 images.",
+    "repository": "https://github.com/InsightSoftwareConsortium/ITKIOOpenJPH",
+    "package-version": "2.3.0",
     "emscripten-docker-image": "itkwasm/emscripten:20240717-6891d4df",
     "wasi-docker-image": "itkwasm/wasi:20240717-6891d4df",
     "typescript-package-name": "@itk-wasm/htj2k",
-    "python-package-name": "itkwasm-htj2k",
-    "package-description": "Wasm-SIMD accelerated decoding and encoding of High-throughput JPEG2000 images.",
-    "repository": "https://github.com/InsightSoftwareConsortium/ITKIOOpenJPH"
+    "python-package-name": "itkwasm-htj2k"
   },
   "scripts": {
     "build": "pnpm build:gen:typescript && pnpm build:gen:python",
