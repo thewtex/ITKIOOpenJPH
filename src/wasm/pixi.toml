@@ -1,0 +1,32 @@
+[project]
+name = "@itk-wasm/htj2k"
+version = "1.0.0"
+authors = ["Matt McCormick <matt.mccormick@kitware.com>"]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+repository = "https://github.com/InsightSoftwareConsortium/ITKIOOpenJPH"
+description = "Wasm-SIMD accelerated decoding and encoding of High-throughput JPEG2000 images."
+license = "Apache-2.0"
+readme = "../../README.md"
+
+[activation]
+scripts = ["itk_wasm_env.bash"]
+
+[tasks]
+pnpm-install = { cmd = "pnpm install", description = "Install Node.js dependencies" }
+
+build-emscripten = { cmd = "pnpx itk-wasm build -i $ITK_WASM_EMSCRIPTEN_DOCKER_IMAGE", description = "Build Emscripten wasm modules", depends-on = ["pnpm-install"] }
+build-emscripten-debug = { cmd = "pnpx itk-wasm build -i $ITK_WASM_EMSCRIPTEN_DOCKER_IMAGE-debug -- -DCMAKE_BUILD_TYPE:STRING=Debug", description = "Build Emscripten wasm modules", depends-on = ["pnpm-install"] }
+build-wasi = { cmd = "pnpx itk-wasm build -i $ITK_WASM_wasi_DOCKER_IMAGE", description = "Build wasi wasm modules", depends-on = ["pnpm-install"] }
+build-wasi-debug = { cmd = "pnpx itk-wasm build -i $ITK_WASM_wasi_DOCKER_IMAGE-debug -- -DCMAKE_BUILD_TYPE:STRING=Debug", description = "Build wasi wasm modules", depends-on = ["pnpm-install"] }
+
+bindgen-python = { cmd = "pnpx itk-wasm -b wasi-build bindgen --interface python --output-dir $ITK_WASM_PYTHON_OUTPUT_DIR --package-name $ITK_WASM_PYTHON_PACKAGE_NAME --package-description \"$ITK_WASM_DESCRIPTION\"", description = "Generate Python bindings", inputs = ["wasi-build/*"] }
+bindgen-typescript = { cmd = "pnpx itk-wasm -b emscripten-build bindgen --interface typescript --output-dir $ITK_WASM_TYPESCRIPT_OUTPUT_DIR --package-name $ITK_WASM_TYPESCRIPT_PACKAGE_NAME --package-description \"$ITK_WASM_DESCRIPTION\" --repository \"$ITK_WASM_REPOSITORY\"", description = "Generate typescript bindings", inputs = ["emscripten-build/*"] }
+
+bindgen-build-typescript = { cmd = "pnpm --filter $ITK_WASM_TYPESCRIPT_PACKAGE_NAME install && pnpm run -C $ITK_WASM_TYPESCRIPT_OUTPUT_DIR build", description = "Generate and build the typescript package", depends-on = ["build-emscripten", "bindgen-typescript"] }
+
+[dependencies]
+nodejs = ">=22.5.1,<23"
+pnpm = ">=9.6.0,<10"
+jq = ">=1.7.1,<2"
+python = ">=3.12.4,<4"
